@@ -51,3 +51,57 @@ ggplot(data=HSI.emm.df,aes(x=diet.name,y=emmean))+
 HSI.lm.r2 <- lmer(HSI~diet+(1|tank),samp%>%
                     mutate(diet=relevel(diet,ref="2")))
 summary(HSI.lm.r2)
+
+
+#making linear model for VSI in samplingcalculations
+
+VSI.lm <- lmer(VSI~diet.name+(1|tank),samp)
+plot(VSI.lm)
+summary(VSI.lm)
+anova(VSI.lm)
+#contrasts for VSI
+(VSI.emm <- emmeans(VSI.lm, "diet.name"))
+VSI.emm.df <- data.frame(VSI.emm)
+contrast(VSI.emm, "tukey")
+#visualizing VSI contrast results
+ggplot(data=VSI.emm.df,aes(x=diet.name,y=emmean))+
+  geom_point()+
+  xlab("")+
+  ylab("VSI")+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1)
+
+
+#making linear model for MR in samplingcalculations
+
+MR.lm <- lmer(MR~diet.name+(1|tank),samp)
+plot(MR.lm)
+summary(MR.lm)
+anova(MR.lm)
+#contrasts for MR
+(MR.emm <- emmeans(MR.lm, "diet.name"))
+MR.emm.df <- data.frame(MR.emm)
+contrast(MR.emm, "tukey")
+#visualizing MR contrast results
+ggplot(data=MR.emm.df,aes(x=diet.name,y=emmean))+
+  geom_point()+
+  xlab("")+
+  ylab("MR")+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1)
+
+
+#making linear model for cond.factor in sampling calculations
+
+cf.lm <-lmer(cond.factor~diet.name+(1|tank),samp)
+plot(cf.lm)
+summary(cf.lm)
+anova(cf.lm)
+#contrasts for condition factor
+(cf.emm<-emmeans(cf.lm,"diet.name"))
+cf.emm.df<-data.frame(cf.emm)
+contrast(cf.emm,"tukey")
+#visualizing condition factor contrast results
+ggplot(data=cf.emm.df,aes(x=diet.name,y=emmean))+
+  geom_point()+
+  xlab("")+
+  ylab("Condition Factor")+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1)

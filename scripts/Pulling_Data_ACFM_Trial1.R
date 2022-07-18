@@ -12,7 +12,7 @@ if(!require(tidyverse)){install.packages("tidyverse")};library(tidyverse)
 #set graphic parameters
 theme_set(theme_bw()+theme(panel.grid = element_blank()))
 
-# pull the samplingcalculations.R data from ACFM Tial 1 google drive
+#pull the samplingcalculations.R and stockoutcaculations.R data from ACFM Trial 1 google drive
 
 saurl <- "https://docs.google.com/spreadsheets/d/1pPBfcCelEU_XjhyCIuJY7qCNYh-ufLbA/edit#gid=1011687095"
 
@@ -22,6 +22,9 @@ samp <- read.csv(text=gsheet2text(saurl,format="csv"),stringsAsFactors = F)
 
 stock <- read.csv(text=gsheet2text(sturl,format="csv"),stringsAsFactors = F)
 
+
+
+#SAMPLING DATA CALCULATIONS
 #organize data a  bit
 samp$diet <- factor(samp$diet,levels=c(1,2,3))
 samp$diet.name <- factor(samp$diet.name,levels=c("Control (100% MFM)",
@@ -105,3 +108,13 @@ ggplot(data=cf.emm.df,aes(x=diet.name,y=emmean))+
   xlab("")+
   ylab("Condition Factor")+
   geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1)
+
+
+
+
+#STOCKOUT DATA CALCULATIONS
+#reorganize data
+stock$diet <- factor(stock$diet,levels=c(1,2,3))
+stock$diet.name <- factor(stock$diet.name,levels=c("Control (100% MFM)",
+                                                 "ACFM for MFM", 
+                                                 "All ACFM"))

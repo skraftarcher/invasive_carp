@@ -119,7 +119,7 @@ stock$diet <- factor(stock$diet,levels=c(1,2,3))
 stock$diet.name <- factor(stock$diet.name,levels=c("Control (100% MFM)",
                                                  "ACFM for MFM", 
                                                  "All ACFM"))
-
+#going to use emmeans for contrasts b/c it is the suggested new version of lsmeans, which is the contrast package used on the R walkthrough
 
 #making linear model for total.g.gain in sampling calculations
 

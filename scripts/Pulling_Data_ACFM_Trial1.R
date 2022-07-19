@@ -209,3 +209,35 @@ ggplot(data=pincrease.all.emm.df,aes(x=diet.name,y=emmean))+
   xlab("")+
   ylab("Total % Biomass Increase (g) for 8 Week Trial")+
   geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1)
+
+
+#comparing FI values from 0-4 weeks and 4-8 weeks
+#I'm not sure if contrasts are the right way to compare the feed intake rates between weeks 0-4 and weeks 4-8; we also will need to figure out how to take on the data for FI since we have RAS1 weeks 4-8 and the rest of the tanks are weeks 6-8. In this case, below, I just looked at 0-4 and 6-8.
+
+w0.4.FI.lm <-lm(w0.4.FI~diet.name,stock)
+plot(w0.4.FI.lm)
+summary(w0.4.FI.lm)
+anova(w0.4.FI.lm)
+# working through contrasts
+(w0.4.FI.emm <- emmeans(w0.4.FI.lm, "diet.name"))
+w0.4.FI.emm.df<-data.frame(w0.4.FI.emm)
+contrast(w0.4.FI.emm, "tukey")
+ggplot(data=w0.4.FI.emm.df,aes(x=diet.name,y=emmean))+
+  geom_point()+
+  xlab("")+
+  ylab("Feed Intake for weeks 0-4")+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1)
+
+w6.8.FI.lm <-lm(w6.8.FI~diet.name,stock)
+plot(w6.8.FI.lm)
+summary(w6.8.FI.lm)
+anova(w6.8.FI.lm)
+# working through contrasts
+(w6.8.FI.emm <- emmeans(w6.8.FI.lm, "diet.name"))
+w6.8.FI.emm.df<-data.frame(w6.8.FI.emm)
+contrast(w6.8.FI.emm, "tukey")
+ggplot(data=w6.8.FI.emm.df,aes(x=diet.name,y=emmean))+
+  geom_point()+
+  xlab("")+
+  ylab("Feed Intake for weeks 6-8")+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1)

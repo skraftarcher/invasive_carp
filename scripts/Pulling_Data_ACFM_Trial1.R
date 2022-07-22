@@ -38,6 +38,7 @@ HSI.lm <- lmer(HSI~diet.name+(1|tank),samp)
 plot(HSI.lm)
 summary(HSI.lm)
 anova(HSI.lm)
+#in summary, all ACFM is significantly different from control for HSI, but in anova, diet does not significantly affect HSI
 
 # working through contrasts
 (HSI.emm <- emmeans(HSI.lm, "diet.name"))
@@ -124,9 +125,9 @@ stock$diet.name <- factor(stock$diet.name,levels=c("Control (100% MFM)",
 #making linear model for total.g.gain in sampling calculations
 
 total.g.gain.lm <-lm(total.g.gain~diet.name,stock)
-plot(cf.lm)
-summary(cf.lm)
-anova(cf.lm)
+plot(total.g.gain.lm)
+summary(total.g.gain.lm)
+anova(total.g.gain.lm)
 # working through contrasts
 (total.g.gain.emm <- emmeans(total.g.gain.lm, "diet.name"))
 total.g.gain.emm.df<-data.frame(total.g.gain.emm)
@@ -145,7 +146,8 @@ avgFCR.all.lm <-lm(avgFCR.all~diet.name,stock)
 plot(avgFCR.all.lm)
 summary(avgFCR.all.lm)
 anova(avgFCR.all.lm)
-# working through contrasts
+#according to summary, the average feed conversion ratio for the ALL ACFM diet was significantly different (less than/smaller) than the control diet. The Anova however showed no significant differences in avg feed conversion ratio between diets
+# working through contrasts 
 (avgFCR.all.emm <- emmeans(avgFCR.all.lm, "diet.name"))
 avgFCR.all.emm.df<-data.frame(avgFCR.all.emm)
 contrast(avgFCR.all.emm, "tukey")
@@ -181,6 +183,7 @@ FCR.all.lm <-lm(FCR.all~diet.name,stock)
 plot(FCR.all.lm)
 summary(FCR.all.lm)
 anova(FCR.all.lm)
+#The summary shows a significant difference in total feed conversion ratio for the ALL ACFM, such that is less than the FCR for the control diet. However, ANova shows no significant variance between the 3 diets and FCR
 # working through contrasts
 (FCR.all.emm <- emmeans(FCR.all.lm, "diet.name"))
 FCR.all.emm.df<-data.frame(FCR.all.emm)
@@ -199,6 +202,7 @@ pincrease.all.lm <-lm(pincrease.all~diet.name,stock)
 plot(pincrease.all.lm)
 summary(FCR.all.lm)
 anova(pincrease.all.lm)
+#Summary shows a significant difference for percent increase (total biomass increase) of the All ACFM tanks compared to the control diet. However, Anova shows no significant differences for % biomass increase for the 3 diets
 # working through contrasts
 (pincrease.all.emm <- emmeans(pincrease.all.lm, "diet.name"))
 pincrease.all.emm.df<-data.frame(pincrease.all.emm)
@@ -228,7 +232,7 @@ FI.lm <- lm(perweekFI~diet.name*nhalf,stock2)
 plot(FI.lm)
 summary(FI.lm)
 anova(FI.lm)
-
+#data shows an overall increase in FI per week for all tanks, and a significant increase in FI per week between the first half of the trial and the second half of the trial 
 FI.lm.first <- lm(perweekFI~diet.name,stock2%>%
               filter(nhalf=="First"))
 plot(FI.lm.first)

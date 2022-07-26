@@ -24,6 +24,12 @@ samp <- read.csv(text=gsheet2text(saurl,format="csv"),stringsAsFactors = F)
 stock <- read.csv(text=gsheet2text(sturl,format="csv"),stringsAsFactors = F)
 
 par(mfrow=c(2,2))
+# generate list of contrasts that we want to do
+conts<-list(carp.nocarp=c(-2,1,1),
+            control.all=c(1,0,-1),
+            control.formfm=c(1,-1,0),
+            formfm.all=c(0,1,-1),
+            p15.p100=c(1,1,-2))
 
 #SAMPLING DATA CALCULATIONS
 #organize data a  bit
@@ -43,7 +49,7 @@ anova(HSI.lm)
 # working through contrasts
 (HSI.emm <- emmeans(HSI.lm, "diet.name"))
 HSI.emm.df<-data.frame(HSI.emm)
-contrast(HSI.emm, "tukey")
+contrast(HSI.emm, conts,adjust="sidak")
 
 # Visualize results
 ggplot(data=HSI.emm.df,aes(x=diet.name,y=emmean))+
@@ -67,7 +73,7 @@ anova(VSI.lm)
 #contrasts for VSI
 (VSI.emm <- emmeans(VSI.lm, "diet.name"))
 VSI.emm.df <- data.frame(VSI.emm)
-contrast(VSI.emm, "tukey")
+contrast(VSI.emm, conts,adjust="sidak")
 #visualizing VSI contrast results
 ggplot(data=VSI.emm.df,aes(x=diet.name,y=emmean))+
   geom_point()+
@@ -85,7 +91,8 @@ anova(MR.lm)
 #contrasts for MR
 (MR.emm <- emmeans(MR.lm, "diet.name"))
 MR.emm.df <- data.frame(MR.emm)
-contrast(MR.emm, "tukey")
+contrast(MR.emm, conts,adjust="sidak")
+
 #visualizing MR contrast results
 ggplot(data=MR.emm.df,aes(x=diet.name,y=emmean))+
   geom_point()+
@@ -103,7 +110,8 @@ anova(cf.lm)
 #contrasts for condition factor
 (cf.emm<-emmeans(cf.lm,"diet.name"))
 cf.emm.df<-data.frame(cf.emm)
-contrast(cf.emm,"tukey")
+contrast(cf.emm, conts,adjust="sidak")
+
 #visualizing condition factor contrast results
 ggplot(data=cf.emm.df,aes(x=diet.name,y=emmean))+
   geom_point()+
@@ -127,11 +135,14 @@ stock$diet.name <- factor(stock$diet.name,levels=c("Control (100% MFM)",
 total.g.gain.lm <-lm(total.g.gain~diet.name,stock)
 plot(total.g.gain.lm)
 summary(total.g.gain.lm)
-anova(total.g.gain.lm)
+Anova(total.g.gain.lm,type="II")
+
 # working through contrasts
 (total.g.gain.emm <- emmeans(total.g.gain.lm, "diet.name"))
 total.g.gain.emm.df<-data.frame(total.g.gain.emm)
-contrast(total.g.gain.emm, "tukey")
+
+contrast(total.g.gain.emm, conts,adjust="sidak")
+
 #visualizing condition factor contrast results
 ggplot(data=total.g.gain.emm.df,aes(x=diet.name,y=emmean))+
   geom_point()+
@@ -150,7 +161,8 @@ anova(avgFCR.all.lm)
 # working through contrasts 
 (avgFCR.all.emm <- emmeans(avgFCR.all.lm, "diet.name"))
 avgFCR.all.emm.df<-data.frame(avgFCR.all.emm)
-contrast(avgFCR.all.emm, "tukey")
+contrast(avgFCR.all.emm, conts,adjust="sidak")
+
 #visualizing condition factor contrast results
 ggplot(data=avgFCR.all.emm.df,aes(x=diet.name,y=emmean))+
   geom_point()+
@@ -168,7 +180,7 @@ anova(avgFI.all.lm)
 # working through contrasts
 (avgFI.all.emm <- emmeans(avgFI.all.lm, "diet.name"))
 avgFI.all.emm.df<-data.frame(avgFI.all.emm)
-contrast(avgFI.all.emm, "tukey")
+contrast(avgFI.all.emm, conts,adjust="sidak")
 #visualizing condition factor contrast results
 ggplot(data=avgFI.all.emm.df,aes(x=diet.name,y=emmean))+
   geom_point()+
@@ -187,7 +199,7 @@ anova(FCR.all.lm)
 # working through contrasts
 (FCR.all.emm <- emmeans(FCR.all.lm, "diet.name"))
 FCR.all.emm.df<-data.frame(FCR.all.emm)
-contrast(FCR.all.emm, "tukey")
+contrast(FCR.all.emm, conts,adjust="sidak")
 #visualizing condition factor contrast results
 ggplot(data=FCR.all.emm.df,aes(x=diet.name,y=emmean))+
   geom_point()+
@@ -206,7 +218,7 @@ anova(pincrease.all.lm)
 # working through contrasts
 (pincrease.all.emm <- emmeans(pincrease.all.lm, "diet.name"))
 pincrease.all.emm.df<-data.frame(pincrease.all.emm)
-contrast(pincrease.all.emm, "tukey")
+contrast(pincrease.all.emm, conts,adjust="sidak")
 #visualizing condition factor contrast results
 ggplot(data=pincrease.all.emm.df,aes(x=diet.name,y=emmean))+
   geom_point()+
@@ -238,3 +250,4 @@ FI.lm.first <- lm(perweekFI~diet.name,stock2%>%
 plot(FI.lm.first)
 summary(FI.lm.first)
 anova(FI.lm.first)
+

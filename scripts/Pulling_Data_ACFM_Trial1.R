@@ -25,11 +25,11 @@ stock <- read.csv(text=gsheet2text(sturl,format="csv"),stringsAsFactors = F)
 
 par(mfrow=c(2,2))
 # generate list of contrasts that we want to do
-conts<-list(carp.nocarp=c(-2,1,1),
-            control.all=c(1,0,-1),
+conts<-list(control.all=c(1,0,-1),
             control.formfm=c(1,-1,0),
-            formfm.all=c(0,1,-1),
-            p15.p100=c(1,1,-2))
+            formfm.all=c(0,1,-1))#,
+            #carp.nocarp=c(-2,1,1),
+            #p15.p100=c(1,1,-2))
 
 #SAMPLING DATA CALCULATIONS
 #organize data a  bit
@@ -74,6 +74,7 @@ anova(VSI.lm)
 (VSI.emm <- emmeans(VSI.lm, "diet.name"))
 VSI.emm.df <- data.frame(VSI.emm)
 contrast(VSI.emm, conts,adjust="sidak")
+
 #visualizing VSI contrast results
 ggplot(data=VSI.emm.df,aes(x=diet.name,y=emmean))+
   geom_point()+
@@ -177,10 +178,12 @@ avgFI.all.lm <-lm(avgFI.all~diet.name,stock)
 plot(avgFI.all.lm)
 summary(avgFI.all.lm)
 anova(avgFI.all.lm)
+
 # working through contrasts
 (avgFI.all.emm <- emmeans(avgFI.all.lm, "diet.name"))
 avgFI.all.emm.df<-data.frame(avgFI.all.emm)
 contrast(avgFI.all.emm, conts,adjust="sidak")
+
 #visualizing condition factor contrast results
 ggplot(data=avgFI.all.emm.df,aes(x=diet.name,y=emmean))+
   geom_point()+
@@ -200,6 +203,7 @@ anova(FCR.all.lm)
 (FCR.all.emm <- emmeans(FCR.all.lm, "diet.name"))
 FCR.all.emm.df<-data.frame(FCR.all.emm)
 contrast(FCR.all.emm, conts,adjust="sidak")
+
 #visualizing condition factor contrast results
 ggplot(data=FCR.all.emm.df,aes(x=diet.name,y=emmean))+
   geom_point()+
@@ -209,7 +213,6 @@ ggplot(data=FCR.all.emm.df,aes(x=diet.name,y=emmean))+
 
 
 #making linear model for pincrease.all in sampling calculations
-
 pincrease.all.lm <-lm(pincrease.all~diet.name,stock)
 plot(pincrease.all.lm)
 summary(FCR.all.lm)
@@ -219,6 +222,7 @@ anova(pincrease.all.lm)
 (pincrease.all.emm <- emmeans(pincrease.all.lm, "diet.name"))
 pincrease.all.emm.df<-data.frame(pincrease.all.emm)
 contrast(pincrease.all.emm, conts,adjust="sidak")
+
 #visualizing condition factor contrast results
 ggplot(data=pincrease.all.emm.df,aes(x=diet.name,y=emmean))+
   geom_point()+

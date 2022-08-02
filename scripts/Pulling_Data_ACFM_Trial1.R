@@ -37,7 +37,8 @@ samp$diet <- factor(samp$diet,levels=c(1,2,3))
 samp$diet.name <- factor(samp$diet.name,levels=c("Control (100% MFM)",
                                                  "ACFM for MFM", 
                                                  "All ACFM"))
-
+colrs<-c("#70AD47","#4A91D0","#4A91D0")
+ocolrs<-c("#FFC000","#FFC000","#4A91D0")
 #making linear model for HSI in samplingcalculations
 
 HSI.lm <- lmer(HSI~diet.name+(1|tank),samp)
@@ -95,11 +96,16 @@ MR.emm.df <- data.frame(MR.emm)
 contrast(MR.emm, conts,adjust="sidak")
 
 #visualizing MR contrast results
-ggplot(data=MR.emm.df,aes(x=diet.name,y=emmean))+
-  geom_point()+
+ggplot(data=MR.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
+  geom_point(size=7,shape=21,stroke=2)+
   xlab("")+
-  ylab("MR")+
-  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1)
+  ylab("Muscle Ratio")+
+  scale_color_manual(values=ocolrs)+
+  scale_fill_manual(values=colrs)+
+  theme(legend.position = "none",
+        axis.text = element_text(size=12),
+        axis.title.y = element_text(size=16))
 
 
 #making linear model for cond.factor in sampling calculations
@@ -114,11 +120,16 @@ cf.emm.df<-data.frame(cf.emm)
 contrast(cf.emm, conts,adjust="sidak")
 
 #visualizing condition factor contrast results
-ggplot(data=cf.emm.df,aes(x=diet.name,y=emmean))+
-  geom_point()+
+ggplot(data=cf.emm.df,aes(x=diet.name,y=emmean,fill=diet.namecolor=diet.name))+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1)+
+  geom_point(size=5,shape=21,stroke=2)+
   xlab("")+
   ylab("Condition Factor")+
-  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1)
+  scale_color_manual(values=ocolrs)+
+  scale_fill_manual(values=colrs)+
+  theme(legend.position = "none",
+        axis.text = element_text(size=12),
+        axis.title.y = element_text(size=16))
 
 
 
@@ -145,11 +156,16 @@ total.g.gain.emm.df<-data.frame(total.g.gain.emm)
 contrast(total.g.gain.emm, conts,adjust="sidak")
 
 #visualizing condition factor contrast results
-ggplot(data=total.g.gain.emm.df,aes(x=diet.name,y=emmean))+
-  geom_point()+
+ggplot(data=total.g.gain.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
+  geom_point(size=7,shape=21,stroke=2)+
   xlab("")+
-  ylab("Total grams gained per Fish")+
-  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1)
+  ylab("Growth (g per fish)")+
+  scale_color_manual(values=ocolrs)+
+  scale_fill_manual(values=colrs)+
+  theme(legend.position = "none",
+        axis.text = element_text(size=12),
+        axis.title.y = element_text(size=16))
 
 
 #making linear model for avgFCR.all in sampling calculations
@@ -194,7 +210,7 @@ ggplot(data=avgFI.all.emm.df,aes(x=diet.name,y=emmean))+
 
 #making linear model for FCR.all in sampling calculations
 
-FCR.all.lm <-lm(FCR.all~diet.name,stock)
+FCR.all.lm <-lm(log(FCR.all)~diet.name,stock)
 plot(FCR.all.lm)
 summary(FCR.all.lm)
 anova(FCR.all.lm)
@@ -205,11 +221,16 @@ FCR.all.emm.df<-data.frame(FCR.all.emm)
 contrast(FCR.all.emm, conts,adjust="sidak")
 
 #visualizing condition factor contrast results
-ggplot(data=FCR.all.emm.df,aes(x=diet.name,y=emmean))+
-  geom_point()+
+ggplot(data=FCR.all.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
+  geom_point(size=7,shape=21,stroke=2)+
   xlab("")+
-  ylab("Total Feed Conversion Ratio for 8 Week Trial")+
-  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1)
+  ylab("Feed Conversion Ratio")+
+  scale_color_manual(values=ocolrs)+
+  scale_fill_manual(values=colrs)+
+  theme(legend.position = "none",
+        axis.text = element_text(size=12),
+        axis.title.y = element_text(size=16))
 
 
 #making linear model for pincrease.all in sampling calculations

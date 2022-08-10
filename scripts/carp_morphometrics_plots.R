@@ -79,4 +79,4 @@ ggsave("figures/condition_plot.jpg",dpi=500)
   ylab("Weight (g)")+
   xlab("Standard length (cm)"))
 
-ggsave("figures/length_weight_plot.jpg",dpi=500)
+ggsave("figures/length_weight_plot.jpg",dpi=500,width=5.99,height=4.25)

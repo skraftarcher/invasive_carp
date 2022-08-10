@@ -9,6 +9,11 @@ if(!require(multcomp)){install.packages("multcomp")};library(multcomp)
 if(!require(lmerTest)){install.packages("lmerTest")};library(lmerTest)
 if(!require(tidyverse)){install.packages("tidyverse")};library(tidyverse)
 
+#set graphic parameters
+theme_set(theme_bw()+theme(panel.grid = element_blank()))
+colrs<-c("#70AD47","#4A91D0","#4A91D0")
+ocolrs<-c("#70AD47","#70AD47","#4A91D0")
+
 #pull the samplingcalculations.2.R and stockoutcaculations.2.R data from ACFM Trial 1 google drive
 
 sa2url <- "https://docs.google.com/spreadsheets/d/1gJiMiNsxcvK8JgB851b56es41gPggkMqzdFpDmT4WDc/edit?pli=1#gid=815912700"
@@ -17,14 +22,21 @@ st2url <- "https://docs.google.com/spreadsheets/d/1gJiMiNsxcvK8JgB851b56es41gPgg
 samp2 <- read.csv(text=gsheet2text(sa2url,format="csv"),stringsAsFactors = F)
 stock2 <-read.csv(text=gsheet2text(st2url,format="csv"),stringsAsFactors = F) 
 
-
+# list of contrasts
+conts<-list(MFO.allACFO=c(1,0,-1),
+            MFO.5050=c(1,-1,0),
+            m5050.allACFO=c(0,1,-1))
 
 #SAMPLING DATA TRIAL 2 CALCULATIONS
 #organize data
 samp2$diet <- factor(samp2$diet,levels=c(4,5,6))
-samp2$diet.name <- factor(samp2$diet.name,levels=c("Control (MFO 100)",
+samp2$diet.name <- factor(samp2$diet.name,
+                          levels=c("Control (MFO 100)",
                                                  "ACFO 50 / MFO 50", 
-                                                 "ACFO 100"))
+                                                 "ACFO 100"),
+                          labels=c("Control (MFO 100)",
+                                   "ICFO 50 / MFO 50", 
+                                   "ICFO 100"))
 
 #making linear model for HSI in samplingcalculations.2.r
 
@@ -76,14 +88,20 @@ MR.2.emm.df <- data.frame(MR.2.emm)
 contrast(MR.2.emm, conts,adjust="sidak")
 
 #visualizing MR contrast results
-ggplot(data=MR.2.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
-  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+geom_point()+
+ggplot(data=MR.2.emm.df,
+       aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),
+                width=.1,color="black")+
+  geom_point(shape=21,size=7,stroke=4)+
   xlab("")+
   ylab("Muscle Ratio")+
   theme(legend.position = "none",
         axis.text = element_text(size=12),
-        axis.title.y = element_text(size=16))
+        axis.title.y = element_text(size=16))+
+  scale_fill_manual(values=colrs)+
+  scale_color_manual(values=ocolrs)
 
+ggsave("figures/trial2_MR.png",width=5.99,height=4.25)
 
 #making linear model for cond.factor in samplingcalculations.2.r
 
@@ -97,15 +115,20 @@ cf.2.emm.df<-data.frame(cf.2.emm)
 contrast(cf.2.emm, conts,adjust="sidak")
 
 #visualizing condition factor contrast results
-ggplot(data=cf.2.emm.df,aes(x=diet.name,y=emmean))+
-  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1)+
-  geom_point()+
+ggplot(data=cf.2.emm.df,
+       aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),
+                width=.1,color="black")+
+  geom_point(shape=21,size=7,stroke=4)+
   xlab("")+
   ylab("Condition Factor")+
   theme(legend.position = "none",
         axis.text = element_text(size=12),
-        axis.title.y = element_text(size=16))
+        axis.title.y = element_text(size=16))+
+  scale_fill_manual(values=colrs)+
+  scale_color_manual(values=ocolrs)
 
+ggsave("figures/trial2_CF.png",width=5.99,height=4.25)
 
 
 #STOCKOUT DATA TRIAL 2 CALCULATIONS
@@ -113,7 +136,10 @@ ggplot(data=cf.2.emm.df,aes(x=diet.name,y=emmean))+
 stock2$diet <- factor(stock2$diet,levels=c(4,5,6))
 stock2$diet.name <- factor(stock2$diet.name,levels=c("Control (MFO 100)",
                                                    "ACFO 50 / MFO 50", 
-                                                   "ACFO 100"))
+                                                   "ACFO 100"),
+                           labels=c("Control (MFO 100)",
+                                     "ICFO 50 / MFO 50", 
+                                     "ICFO 100"))
 
 #making linear model for total.g.gain in stockoutcalculations.2.r
 
@@ -129,14 +155,20 @@ total.g.gain.2.emm.df<-data.frame(total.g.gain.2.emm)
 contrast(total.g.gain.2.emm, conts,adjust="sidak")
 
 #visualizing condition factor contrast results
-ggplot(data=total.g.gain.2.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
-  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
-  geom_point()+
+ggplot(data=total.g.gain.2.emm.df,
+       aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),
+                width=.1,color="black")+
+  geom_point(shape=21,size=7,stroke=4)+
   xlab("")+
   ylab("Growth (g per fish)")+
   theme(legend.position = "none",
         axis.text = element_text(size=12),
-        axis.title.y = element_text(size=16))
+        axis.title.y = element_text(size=16))+
+  scale_fill_manual(values=colrs)+
+  scale_color_manual(values=ocolrs)
+
+ggsave("figures/trial2_growth.png",width=5.99,height=4.25)
 
 
 #making linear model for avgFCR.all in stockoutcalculations.2.r
@@ -192,15 +224,20 @@ FCR.all.2.emm.df<-data.frame(FCR.all.2.emm)
 contrast(FCR.all.2.emm, conts,adjust="sidak")
 
 #visualizing condition factor contrast results
-ggplot(data=FCR.all.2.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
-  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
-  geom_point()+
+ggplot(data=FCR.all.2.emm.df,
+       aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),
+                width=.1,color="black")+
+  geom_point(shape=21,size=7,stroke=4)+
   xlab("")+
   ylab("Feed Conversion Ratio")+
   theme(legend.position = "none",
         axis.text = element_text(size=12),
-        axis.title.y = element_text(size=16))
+        axis.title.y = element_text(size=16))+
+  scale_fill_manual(values=colrs)+
+  scale_color_manual(values=ocolrs)
 
+ggsave("figures/trial2_FCR.png",width=5.99,height=4.25)
 
 #making linear model for pincrease.all in stockoutcalculations.2.r
 pincrease.all.2.lm <-lm(pincrease.all~diet.name,stock2)
@@ -219,3 +256,4 @@ ggplot(data=pincrease.all.2.emm.df,aes(x=diet.name,y=emmean))+
   xlab("")+
   ylab("Total % Biomass Increase (g) for 8 Week Trial")+
   geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1)
+

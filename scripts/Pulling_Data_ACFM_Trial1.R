@@ -36,7 +36,10 @@ conts<-list(control.all=c(1,0,-1),
 samp$diet <- factor(samp$diet,levels=c(1,2,3))
 samp$diet.name <- factor(samp$diet.name,levels=c("Control (100% MFM)",
                                                  "ACFM for MFM", 
-                                                 "All ACFM"))
+                                                 "All ACFM"),
+                         labels = c("Control (100% MFM)",
+                                    "ICFM for MFM", 
+                                    "All ICFM"))
 colrs<-c("#70AD47","#4A91D0","#4A91D0")
 ocolrs<-c("#FFC000","#FFC000","#4A91D0")
 #making linear model for HSI in samplingcalculations
@@ -96,9 +99,10 @@ MR.emm.df <- data.frame(MR.emm)
 contrast(MR.emm, conts,adjust="sidak")
 
 #visualizing MR contrast results
-ggplot(data=MR.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
-  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
-  geom_point(size=7,shape=21,stroke=2)+
+ggplot(data=MR.emm.df)+
+  geom_errorbar(aes(x=diet.name,ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
+  geom_point(size=7,shape=21,stroke=2,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
+  #geom_boxplot(aes(x=diet.name,y=MR),alpha=.2,data=samp)
   xlab("")+
   ylab("Muscle Ratio")+
   scale_color_manual(values=ocolrs)+
@@ -107,7 +111,7 @@ ggplot(data=MR.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
         axis.text = element_text(size=12),
         axis.title.y = element_text(size=16))
 
-
+ggsave("figures/trial1_MR.png",width=5.99,height=4.25)
 #making linear model for cond.factor in sampling calculations
 
 cf.lm <-lmer(cond.factor~diet.name+(1|tank),samp)
@@ -120,8 +124,9 @@ cf.emm.df<-data.frame(cf.emm)
 contrast(cf.emm, conts,adjust="sidak")
 
 #visualizing condition factor contrast results
-ggplot(data=cf.emm.df,aes(x=diet.name,y=emmean,fill=diet.namecolor=diet.name))+
-  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1)+
+ggplot(data=cf.emm.df,aes(x=diet.name,y=emmean,
+                          fill=diet.name,color=diet.name))+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),color="black",width=.1)+
   geom_point(size=5,shape=21,stroke=2)+
   xlab("")+
   ylab("Condition Factor")+
@@ -132,14 +137,17 @@ ggplot(data=cf.emm.df,aes(x=diet.name,y=emmean,fill=diet.namecolor=diet.name))+
         axis.title.y = element_text(size=16))
 
 
-
+ggsave("figures/trial1_CF.png",width=5.99,height=4.25)
 
 #STOCKOUT DATA CALCULATIONS
 #reorganize data
 stock$diet <- factor(stock$diet,levels=c(1,2,3))
 stock$diet.name <- factor(stock$diet.name,levels=c("Control (100% MFM)",
                                                  "ACFM for MFM", 
-                                                 "All ACFM"))
+                                                 "All ACFM"),
+                          labels=c("Control (100% MFM)",
+                                   "ICFM for MFM", 
+                                   "All ICFM"))
 #going to use emmeans for contrasts b/c it is the suggested new version of lsmeans, which is the contrast package used on the R walkthrough
 
 #making linear model for total.g.gain in sampling calculations
@@ -167,7 +175,7 @@ ggplot(data=total.g.gain.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=di
         axis.text = element_text(size=12),
         axis.title.y = element_text(size=16))
 
-
+ggsave("figures/trial1_growth.png",width=5.99,height=4.25)
 #making linear model for avgFCR.all in sampling calculations
 
 avgFCR.all.lm <-lm(avgFCR.all~diet.name,stock)
@@ -210,7 +218,7 @@ ggplot(data=avgFI.all.emm.df,aes(x=diet.name,y=emmean))+
 
 #making linear model for FCR.all in sampling calculations
 
-FCR.all.lm <-lm(log(FCR.all)~diet.name,stock)
+FCR.all.lm <-lm(FCR.all~diet.name,stock)
 plot(FCR.all.lm)
 summary(FCR.all.lm)
 anova(FCR.all.lm)
@@ -232,6 +240,7 @@ ggplot(data=FCR.all.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.na
         axis.text = element_text(size=12),
         axis.title.y = element_text(size=16))
 
+ggsave("figures/trial1_fcrall.png",width=5.99,height=4.25)
 
 #making linear model for pincrease.all in sampling calculations
 pincrease.all.lm <-lm(pincrease.all~diet.name,stock)

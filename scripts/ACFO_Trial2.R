@@ -12,10 +12,10 @@ if(!require(tidyverse)){install.packages("tidyverse")};library(tidyverse)
 #pull the samplingcalculations.2.R and stockoutcaculations.2.R data from ACFM Trial 1 google drive
 
 sa2url <- "https://docs.google.com/spreadsheets/d/1gJiMiNsxcvK8JgB851b56es41gPggkMqzdFpDmT4WDc/edit?pli=1#gid=815912700"
-st2url
+st2url <- "https://docs.google.com/spreadsheets/d/1gJiMiNsxcvK8JgB851b56es41gPggkMqzdFpDmT4WDc/edit?pli=1#gid=1149174180"
 
 samp2 <- read.csv(text=gsheet2text(sa2url,format="csv"),stringsAsFactors = F)
-stock2
+stock2 <-read.csv(text=gsheet2text(st2url,format="csv"),stringsAsFactors = F) 
 
 
 
@@ -105,3 +105,117 @@ ggplot(data=cf.2.emm.df,aes(x=diet.name,y=emmean))+
   theme(legend.position = "none",
         axis.text = element_text(size=12),
         axis.title.y = element_text(size=16))
+
+
+
+#STOCKOUT DATA TRIAL 2 CALCULATIONS
+#reorganize data
+stock2$diet <- factor(stock2$diet,levels=c(4,5,6))
+stock2$diet.name <- factor(stock2$diet.name,levels=c("Control (MFO 100)",
+                                                   "ACFO 50 / MFO 50", 
+                                                   "ACFO 100"))
+
+#making linear model for total.g.gain in stockoutcalculations.2.r
+
+total.g.gain.2.lm <-lm(total.g.gain~diet.name,stock2)
+plot(total.g.gain.2.lm)
+summary(total.g.gain.2.lm)
+Anova(total.g.gain.2.lm,type="II")
+
+# working through contrasts
+(total.g.gain.2.emm <- emmeans(total.g.gain.2.lm, "diet.name"))
+total.g.gain.2.emm.df<-data.frame(total.g.gain.2.emm)
+
+contrast(total.g.gain.2.emm, conts,adjust="sidak")
+
+#visualizing condition factor contrast results
+ggplot(data=total.g.gain.2.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
+  geom_point()+
+  xlab("")+
+  ylab("Growth (g per fish)")+
+  theme(legend.position = "none",
+        axis.text = element_text(size=12),
+        axis.title.y = element_text(size=16))
+
+
+#making linear model for avgFCR.all in stockoutcalculations.2.r
+
+avgFCR.all.2.lm <-lm(avgFCR.all~diet.name,stock2)
+plot(avgFCR.all.2.lm)
+summary(avgFCR.all.2.lm)
+anova(avgFCR.all.2.lm)
+
+# working through contrasts 
+(avgFCR.all.2.emm <- emmeans(avgFCR.all.2.lm, "diet.name"))
+avgFCR.all.2.emm.df<-data.frame(avgFCR.all.2.emm)
+contrast(avgFCR.all.2.emm, conts,adjust="sidak")
+
+#visualizing condition factor contrast results
+ggplot(data=avgFCR.all.2.emm.df,aes(x=diet.name,y=emmean))+
+  geom_point()+
+  xlab("")+
+  ylab("Average Feed Conversion Ratio for 8 Week Trial")+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1)
+
+
+#making linear model for avgFI.all in stockoutcalculations.2.r
+
+avgFI.all.2.lm <-lm(avgFI.all~diet.name,stock2)
+plot(avgFI.all.2.lm)
+summary(avgFI.all.2.lm)
+anova(avgFI.all.2.lm)
+
+# working through contrasts
+(avgFI.all.2.emm <- emmeans(avgFI.all.2.lm, "diet.name"))
+avgFI.all.2.emm.df<-data.frame(avgFI.all.2.emm)
+contrast(avgFI.all.2.emm, conts,adjust="sidak")
+
+#visualizing condition factor contrast results
+ggplot(data=avgFI.all.2.emm.df,aes(x=diet.name,y=emmean))+
+  geom_point()+
+  xlab("")+
+  ylab("Total Average Feed Intake for 8 Week Trial")+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1)
+
+
+#making linear model for FCR.all in stockoutcalculations.2.r
+
+FCR.all.2.lm <-lm(log(FCR.all)~diet.name,stock2)
+plot(FCR.all.2.lm)
+summary(FCR.all.2.lm)
+anova(FCR.all.2.lm)
+
+# working through contrasts
+(FCR.all.2.emm <- emmeans(FCR.all.2.lm, "diet.name"))
+FCR.all.2.emm.df<-data.frame(FCR.all.2.emm)
+contrast(FCR.all.2.emm, conts,adjust="sidak")
+
+#visualizing condition factor contrast results
+ggplot(data=FCR.all.2.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
+  geom_point()+
+  xlab("")+
+  ylab("Feed Conversion Ratio")+
+  theme(legend.position = "none",
+        axis.text = element_text(size=12),
+        axis.title.y = element_text(size=16))
+
+
+#making linear model for pincrease.all in stockoutcalculations.2.r
+pincrease.all.2.lm <-lm(pincrease.all~diet.name,stock2)
+plot(pincrease.all.2.lm)
+summary(FCR.all.2.lm)
+anova(pincrease.all.2.lm)
+
+# working through contrasts
+(pincrease.all.2.emm <- emmeans(pincrease.all.2.lm, "diet.name"))
+pincrease.all.2.emm.df<-data.frame(pincrease.all.2.emm)
+contrast(pincrease.all.2.emm, conts,adjust="sidak")
+
+#visualizing condition factor contrast results
+ggplot(data=pincrease.all.2.emm.df,aes(x=diet.name,y=emmean))+
+  geom_point()+
+  xlab("")+
+  ylab("Total % Biomass Increase (g) for 8 Week Trial")+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1)

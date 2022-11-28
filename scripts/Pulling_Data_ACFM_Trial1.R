@@ -14,14 +14,10 @@ if(!require(tidyverse)){install.packages("tidyverse")};library(tidyverse)
 theme_set(theme_bw()+theme(panel.grid = element_blank()))
 
 #pull the samplingcalculations.R and stockoutcaculations.R data from ACFM Trial 1 google drive
+source("scripts/download_data-EX.R")
 
-saurl <- "https://docs.google.com/spreadsheets/d/1pPBfcCelEU_XjhyCIuJY7qCNYh-ufLbA/edit#gid=1011687095"
-
-sturl <- "https://docs.google.com/spreadsheets/d/1pPBfcCelEU_XjhyCIuJY7qCNYh-ufLbA/edit#gid=1549175690"
-
-samp <- read.csv(text=gsheet2text(saurl,format="csv"),stringsAsFactors = F)
-
-stock <- read.csv(text=gsheet2text(sturl,format="csv"),stringsAsFactors = F)
+samp <- read.csv("odata/trial1_samplingcalcs.csv")
+stock <- read.csv("odata/trial1_stockingcalcs.csv")
 
 par(mfrow=c(2,2))
 # generate list of contrasts that we want to do

@@ -15,13 +15,9 @@ colrs<-c("#70AD47","#4A91D0","#4A91D0")
 ocolrs<-c("#70AD47","#70AD47","#4A91D0")
 
 #pull the samplingcalculations.2.R and stockoutcaculations.2.R data from ACFM Trial 1 google drive
-
-sa2url <- "https://docs.google.com/spreadsheets/d/1gJiMiNsxcvK8JgB851b56es41gPggkMqzdFpDmT4WDc/edit?pli=1#gid=815912700"
-st2url <- "https://docs.google.com/spreadsheets/d/1gJiMiNsxcvK8JgB851b56es41gPggkMqzdFpDmT4WDc/edit?pli=1#gid=1149174180"
-
-samp2 <- read.csv(text=gsheet2text(sa2url,format="csv"),stringsAsFactors = F)
-stock2 <-read.csv(text=gsheet2text(st2url,format="csv"),stringsAsFactors = F) 
-
+source("scripts/download_data-EX.R")
+samp2 <- read.csv("odata/trial2_samplingcalcs.csv")
+stock2 <- read.csv("odata/trial2_stockingcalcs.csv")
 # list of contrasts
 conts<-list(MFO.allACFO=c(1,0,-1),
             MFO.5050=c(1,-1,0),
@@ -213,7 +209,7 @@ ggplot(data=avgFI.all.2.emm.df,aes(x=diet.name,y=emmean))+
 
 #making linear model for FCR.all in stockoutcalculations.2.r
 
-FCR.all.2.lm <-lm(log(FCR.all)~diet.name,stock2)
+FCR.all.2.lm <-lm(FCR.all~diet.name,stock2)
 plot(FCR.all.2.lm)
 summary(FCR.all.2.lm)
 anova(FCR.all.2.lm)

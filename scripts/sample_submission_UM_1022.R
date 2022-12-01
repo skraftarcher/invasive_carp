@@ -2,8 +2,8 @@
 
 #joiining together two excel files: UM Submission directory and Moisture Content Data
 library(dplyr)
-UM <- read.csv("um_prox_data.csv")
-moisture <- read.csv("moisture_content.csv")
+UM <- read.csv("odata/um_prox_data.csv")
+moisture <- read.csv("odata/moisture.csv")
 inner_join(x=UM, y=moisture, by="Sample")
 sampledirectory <- inner_join(x=UM, y=moisture, by="Sample")
 

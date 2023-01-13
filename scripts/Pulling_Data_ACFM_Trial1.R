@@ -24,8 +24,8 @@ par(mfrow=c(2,2))
 conts<-list(control.all=c(1,0,-1),
             control.formfm=c(1,-1,0),
             formfm.all=c(0,1,-1))#,
-            #carp.nocarp=c(-2,1,1),
-            #p15.p100=c(1,1,-2))
+#carp.nocarp=c(-2,1,1),
+#p15.p100=c(1,1,-2))
 
 #SAMPLING DATA CALCULATIONS
 #organize data a  bit
@@ -139,12 +139,50 @@ ggsave("figures/trial1_CF.png",width=5.99,height=4.25)
 #reorganize data
 stock$diet <- factor(stock$diet,levels=c(1,2,3))
 stock$diet.name <- factor(stock$diet.name,levels=c("Control (100% MFM)",
-                                                 "ACFM for MFM", 
-                                                 "All ACFM"),
+                                                   "ACFM for MFM", 
+                                                   "All ACFM"),
                           labels=c("Control (100% MFM)",
                                    "ICFM for MFM", 
                                    "All ICFM"))
 #going to use emmeans for contrasts b/c it is the suggested new version of lsmeans, which is the contrast package used on the R walkthrough
+
+#linear model + contrasts for IFW (Initial Fish Weight)
+ifw.lm <- lm(IFW~diet.name, stock)
+plot(ifw.lm)
+summary(ifw.lm)
+Anova(ifw.lm,type="II")
+(ifw.emm<-emmeans(ifw.lm,"diet.name"))
+ifw.emm.df<-data.frame(ifw.emm)
+contrast(ifw.emm,conts,adjust="sidak")
+
+ggplot(data=ifw.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
+  geom_point(size=7,shape=21,stroke=2)+
+  xlab("")+
+  ylab("Initial Fish Weight (g/fish)")+
+  theme(legend.position = "none",
+        axis.text = element_text(size=12),
+        axis.title.y = element_text(size=16))
+
+
+#linear model + contrasts for FW (final weight, 8 weeks)
+fw.lm <- lm(w8.weight~diet.name, stock)
+plot(fw.lm)
+summary(fw.lm)
+Anova(fw.lm,type="II")
+(fw.emm<-emmeans(fw.lm,"diet.name"))
+fw.emm.df<-data.frame(fw.emm)
+contrast(fw.emm,conts,adjust="sidak")
+
+ggplot(data=fw.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
+  geom_point(size=7,shape=21,stroke=2)+
+  xlab("")+
+  ylab("Final Fish Weight (g/fish)")+
+  theme(legend.position = "none",
+        axis.text = element_text(size=12),
+        axis.title.y = element_text(size=16))
+
 
 #making linear model for total.g.gain in sampling calculations
 
@@ -156,10 +194,8 @@ Anova(total.g.gain.lm,type="II")
 # working through contrasts
 (total.g.gain.emm <- emmeans(total.g.gain.lm, "diet.name"))
 total.g.gain.emm.df<-data.frame(total.g.gain.emm)
-
 contrast(total.g.gain.emm, conts,adjust="sidak")
 
-#visualizing condition factor contrast results
 ggplot(data=total.g.gain.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
   geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
   geom_point(size=7,shape=21,stroke=2)+
@@ -172,6 +208,7 @@ ggplot(data=total.g.gain.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=di
         axis.title.y = element_text(size=16))
 
 ggsave("figures/trial1_growth.png",width=5.99,height=4.25)
+
 #making linear model for avgFCR.all in sampling calculations
 
 avgFCR.all.lm <-lm(avgFCR.all~diet.name,stock)
@@ -184,7 +221,6 @@ anova(avgFCR.all.lm)
 avgFCR.all.emm.df<-data.frame(avgFCR.all.emm)
 contrast(avgFCR.all.emm, conts,adjust="sidak")
 
-#visualizing condition factor contrast results
 ggplot(data=avgFCR.all.emm.df,aes(x=diet.name,y=emmean))+
   geom_point()+
   xlab("")+
@@ -204,7 +240,6 @@ anova(avgFI.all.lm)
 avgFI.all.emm.df<-data.frame(avgFI.all.emm)
 contrast(avgFI.all.emm, conts,adjust="sidak")
 
-#visualizing condition factor contrast results
 ggplot(data=avgFI.all.emm.df,aes(x=diet.name,y=emmean))+
   geom_point()+
   xlab("")+
@@ -213,7 +248,6 @@ ggplot(data=avgFI.all.emm.df,aes(x=diet.name,y=emmean))+
 
 
 #making linear model for FCR.all in sampling calculations
-
 FCR.all.lm <-lm(FCR.all~diet.name,stock)
 plot(FCR.all.lm)
 summary(FCR.all.lm)
@@ -224,7 +258,6 @@ anova(FCR.all.lm)
 FCR.all.emm.df<-data.frame(FCR.all.emm)
 contrast(FCR.all.emm, conts,adjust="sidak")
 
-#visualizing condition factor contrast results
 ggplot(data=FCR.all.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
   geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
   geom_point(size=7,shape=21,stroke=2)+
@@ -249,7 +282,6 @@ anova(pincrease.all.lm)
 pincrease.all.emm.df<-data.frame(pincrease.all.emm)
 contrast(pincrease.all.emm, conts,adjust="sidak")
 
-#visualizing condition factor contrast results
 ggplot(data=pincrease.all.emm.df,aes(x=diet.name,y=emmean))+
   geom_point()+
   xlab("")+
@@ -258,7 +290,6 @@ ggplot(data=pincrease.all.emm.df,aes(x=diet.name,y=emmean))+
 
 
 #comparing FI values from 0-4 weeks and 4-8 weeks
-#I'm not sure if contrasts are the right way to compare the feed intake rates between weeks 0-4 and weeks 4-8; we also will need to figure out how to take on the data for FI since we have RAS1 weeks 4-8 and the rest of the tanks are weeks 6-8. In this case, below, I just looked at 0-4 and 6-8.
 
 #reorganizing data
 stock2 <- stock%>%
@@ -276,7 +307,7 @@ summary(FI.lm)
 anova(FI.lm)
 #data shows an overall increase in FI per week for all tanks, and a significant increase in FI per week between the first half of the trial and the second half of the trial 
 FI.lm.first <- lm(perweekFI~diet.name,stock2%>%
-              filter(nhalf=="First"))
+                    filter(nhalf=="First"))
 plot(FI.lm.first)
 summary(FI.lm.first)
 anova(FI.lm.first)

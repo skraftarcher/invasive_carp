@@ -269,7 +269,7 @@ ggsave("figures/trial2_FCR.png",width=5.99,height=4.25)
 #making linear model for pincrease.all in stockoutcalculations.2.r
 pincrease.all.2.lm <-lm(pincrease.all~diet.name,stock2)
 plot(pincrease.all.2.lm)
-summary(FCR.all.2.lm)
+summary(pincrease.all.2.lm)
 anova(pincrease.all.2.lm)
 
 # working through contrasts

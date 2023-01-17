@@ -7,7 +7,7 @@ if(!require(gsheet))install.packages("gsheet");library(gsheet)
 if(!require(readxl))install.packages("readxl");library(readxl)
 
 # bring in data----
-source("download_data-EX.R")
+source("scripts/download_data-EX.R")
 
 prox.res<-read_xlsx("odata/22_14521LUMCONsa_ah.xlsx",sheet="forR")
 sample.id<-read_xlsx("odata/22_14521 Archer Sample ID Key.xlsx",sheet="forR")

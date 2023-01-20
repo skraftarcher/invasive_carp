@@ -38,6 +38,8 @@ samp$diet.name <- factor(samp$diet.name,levels=c("Control (100% MFM)",
                                     "All ICFM"))
 colrs<-c("#70AD47","#4A91D0","#4A91D0")
 ocolrs<-c("#FFC000","#FFC000","#4A91D0")
+
+
 #making linear model for HSI in samplingcalculations
 
 HSI.lm <- lmer(HSI~diet.name+(1|tank),samp)

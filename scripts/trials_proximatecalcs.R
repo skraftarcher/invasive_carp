@@ -1,4 +1,4 @@
-#Trial 1 Proximate Calculations
+#Trial 1 & 2 Proximate Calculations
 #A. Host 1/20/23
 
 # load packages----

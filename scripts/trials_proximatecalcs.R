@@ -38,6 +38,37 @@ ocolrs<-c("#FFC000","#FFC000","#4A91D0")
 trial1 <- trials[row.names(trials)%in% 1:10,]
 trial2 <- trials[row.names(trials)%in%11:20,]
 
+
+#contrasts for moisture, trial 1
+moisture.ww.1.lm<- lm(moisture..~diet.name,trial1)
+plot(moisture.ww.1.lm)
+summary(moisture.ww.1.lm)
+anova(moisture.ww.1.lm)
+(moisture.ww.1.emm<-emmeans(moisture.ww.1.lm,"diet.name"))
+moisture.ww.1.emm.df<-data.frame(moisture.ww.1.emm)
+contrast(moisture.ww.1.emm,conts,adjust = "sidak")
+
+ggplot(data=moisture.ww.1.emm.df,aes(x=diet.name,y=emmean))+
+  geom_point()+
+  xlab("")+
+  ylab("Moisture Content")+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1)
+
+#contrasts for moisture, trial 2
+moisture.ww.2.lm<- lm(moisture..~diet.name,trial2)
+plot(moisture.ww.2.lm)
+summary(moisture.ww.2.lm)
+anova(moisture.ww.2.lm)
+(moisture.ww.2.emm<-emmeans(moisture.ww.2.lm,"diet.name"))
+moisture.ww.2.emm.df<-data.frame(moisture.ww.2.emm)
+contrast(moisture.ww.2.emm,conts,adjust = "sidak")
+
+ggplot(data=moisture.ww.2.emm.df,aes(x=diet.name,y=emmean))+
+  geom_point()+
+  xlab("")+
+  ylab("Moisture Content")+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1)
+
 #contrasts for protein, trial 1
 protein.ww.1.lm <- lm(protein.ww~diet.name,trial1)
 plot(protein.ww.1.lm)

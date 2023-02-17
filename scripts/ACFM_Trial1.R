@@ -99,17 +99,17 @@ contrast(MR.emm, conts,adjust="sidak")
 #visualizing MR contrast results
 ggplot(data=MR.emm.df)+
   geom_errorbar(aes(x=diet.name,ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
-  geom_point(size=7,shape=21,stroke=2,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
+  geom_point(size=10,shape=21,stroke=2,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
   #geom_boxplot(aes(x=diet.name,y=MR),alpha=.2,data=samp)
   xlab("")+
   ylab("Muscle Ratio")+
   scale_color_manual(values=ocolrs)+
   scale_fill_manual(values=colrs)+
   theme(legend.position = "none",
-        axis.text = element_text(size=12),
-        axis.title.y = element_text(size=16))
+        axis.text = element_text(size=24, color="black"),
+        axis.title.y = element_text(size=24))
 
-ggsave("figures/trial1_MR.png",width=5.99,height=4.25)
+ggsave("figures/trial1_MR.png",width=10,height=5)
 #making linear model for cond.factor in sampling calculations
 
 cf.lm <-lmer(cond.factor~diet.name+(1|tank),samp)
@@ -262,16 +262,16 @@ contrast(FCR.all.emm, conts,adjust="sidak")
 
 ggplot(data=FCR.all.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
   geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
-  geom_point(size=7,shape=21,stroke=2)+
+  geom_point(size=10,shape=21,stroke=2)+
   xlab("")+
   ylab("Feed Conversion Ratio")+
   scale_color_manual(values=ocolrs)+
   scale_fill_manual(values=colrs)+
   theme(legend.position = "none",
-        axis.text = element_text(size=12),
-        axis.title.y = element_text(size=16))
+        axis.text = element_text(size=24,color="black"),
+        axis.title.y = element_text(size=24))
 
-ggsave("figures/trial1_fcrall.png",width=5.99,height=4.25)
+ggsave("figures/trial1_fcrall.png",width=10,height=5)
 
 #making linear model for pincrease.all in sampling calculations
 pincrease.all.lm <-lm(pincrease.all~diet.name,stock)

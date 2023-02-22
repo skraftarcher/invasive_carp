@@ -13,6 +13,11 @@ if(!require(lmerTest)){install.packages("lmerTest")};library(lmerTest)
 #load data from proximates_dataorg_analysis script
 source("scripts/proximates_dataorg_analysis.R")
 
+#theme & colors
+theme_set(theme_bw()+theme(panel.grid = element_blank()))
+colrs<-c("#70AD47","#4A91D0","#4A91D0")
+ocolrs<-c("#FFC000","#FFC000","#4A91D0")
+
 #establishing contrasts
 conts<-list(control.all=c(1,0,-1),
             control.formfm=c(1,-1,0),
@@ -30,6 +35,7 @@ trials$diet.name <- factor(trials$diet.name,levels=c("Control (100% MFM)",
                                     "Control (MFO 100)",
                                     "ICFO 50 / ICFO 50",
                                     "ICFO 100"))
+theme_set(theme_bw()+theme(panel.grid = element_blank()))
 colrs<-c("#70AD47","#4A91D0","#4A91D0")
 ocolrs<-c("#FFC000","#FFC000","#4A91D0")
 
@@ -78,13 +84,22 @@ anova(protein.ww.1.lm)
 protein.ww.1.emm.df<-data.frame(protein.ww.1.emm)
 contrast(protein.ww.1.emm, conts,adjust="sidak")
 
-ggplot(data=protein.ww.1.emm.df,aes(x=diet.name,y=emmean))+
-  geom_point()+
+ggplot(data=protein.ww.1.emm.df)+
+  geom_point(size=10,shape=21,stroke=2,aes(x=diet.name,y=emmean, color=diet.name,fill=diet.name))+
   xlab("")+
   ylab("Protein Content")+
-  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1)
+  geom_errorbar(aes(x=diet.name,ymin=lower.CL,ymax=upper.CL),width=.1)+
+  scale_color_manual(values=ocolrs)+
+  scale_fill_manual(values=colrs)+
+  theme(legend.position = "none",
+        axis.text = element_text(size=24, color="black"),
+        axis.title.y = element_text(size=24))
 
 #contrasts for protein, trial 2
+colrs<-c("#70AD47","#4A91D0","#4A91D0")
+ocolrs<-c("#70AD47","#70AD47","#4A91D0")
+
+
 protein.ww.2.lm <- lm(protein.ww~diet.name,trial2)
 plot(protein.ww.2.lm)
 summary(protein.ww.2.lm)
@@ -93,11 +108,18 @@ anova(protein.ww.2.lm)
 protein.ww.2.emm.df<-data.frame(protein.ww.2.emm)
 contrast(protein.ww.2.emm, conts,adjust="sidak")
 
-ggplot(data=protein.ww.2.emm.df,aes(x=diet.name,y=emmean))+
-  geom_point()+
+ggplot(data=protein.ww.2.emm.df)+
+  geom_errorbar(aes(x=diet.name,ymin=lower.CL,ymax=upper.CL),width=.1)+
+  geom_point(size=10,shape=21,stroke=4,aes(x=diet.name,y=emmean, color=diet.name,fill=diet.name))+
   xlab("")+
   ylab("Protein Content")+
-  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1)
+  scale_color_manual(values=ocolrs)+
+  scale_fill_manual(values=colrs)+
+  theme(legend.position = "none",
+        axis.text = element_text(size=24, color="black"),
+        axis.title.y = element_text(size=24))
+
+ggsave("figures/trial2_protein.png",width=10.5,height=7)
 
 #contrasts for fat, trial 1
 fat.ww.1.lm <- lm(fat.ww~diet.name,trial1)

@@ -85,16 +85,16 @@ ggplot(data=MR.2.emm.df,
        aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
   geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),
                 width=.1,color="black")+
-  geom_point(shape=21,size=10,stroke=2)+
+  geom_point(shape=21,size=10,stroke=4)+
   xlab("")+
   ylab("Muscle Ratio")+
   theme(legend.position = "none",
-        axis.text = element_text(size=20, color="black"),
+        axis.text = element_text(size=24, color="black"),
         axis.title.y = element_text(size=24))+
   scale_fill_manual(values=colrs)+
   scale_color_manual(values=ocolrs)
 
-ggsave("figures/trial2_MR.png",width=10,height=5)
+ggsave("figures/trial2_MR.png",width=11,height=5)
 
 #making linear model for cond.factor in samplingcalculations.2.r
 
@@ -255,16 +255,16 @@ ggplot(data=FCR.all.2.emm.df,
        aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
   geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),
                 width=.1,color="black")+
-  geom_point(shape=21,size=10,stroke=2)+
+  geom_point(shape=21,size=10,stroke=4)+
   xlab("")+
   ylab("Feed Conversion Ratio")+
   theme(legend.position = "none",
-        axis.text = element_text(size=20,color="black"),
+        axis.text = element_text(size=24,color="black"),
         axis.title.y = element_text(size=24))+
   scale_fill_manual(values=colrs)+
   scale_color_manual(values=ocolrs)
 
-ggsave("figures/trial2_FCR.png",width=10,height=5)
+ggsave("figures/trial2_FCR.png",width=11,height=5)
 
 #making linear model for pincrease.all in stockoutcalculations.2.r
 pincrease.all.2.lm <-lm(pincrease.all~diet.name,stock2)

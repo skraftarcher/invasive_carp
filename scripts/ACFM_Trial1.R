@@ -99,7 +99,7 @@ contrast(MR.emm, conts,adjust="sidak")
 #visualizing MR contrast results
 ggplot(data=MR.emm.df)+
   geom_errorbar(aes(x=diet.name,ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
-  geom_point(size=10,shape=21,stroke=2,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
+  geom_point(size=10,shape=21,stroke=4,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
   #geom_boxplot(aes(x=diet.name,y=MR),alpha=.2,data=samp)
   xlab("")+
   ylab("Muscle Ratio")+
@@ -262,7 +262,7 @@ contrast(FCR.all.emm, conts,adjust="sidak")
 
 ggplot(data=FCR.all.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
   geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
-  geom_point(size=10,shape=21,stroke=2)+
+  geom_point(size=10,shape=21,stroke=4)+
   xlab("")+
   ylab("Feed Conversion Ratio")+
   scale_color_manual(values=ocolrs)+

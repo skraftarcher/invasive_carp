@@ -85,7 +85,7 @@ protein.ww.1.emm.df<-data.frame(protein.ww.1.emm)
 contrast(protein.ww.1.emm, conts,adjust="sidak")
 
 ggplot(data=protein.ww.1.emm.df)+
-  geom_point(size=10,shape=21,stroke=2,aes(x=diet.name,y=emmean, color=diet.name,fill=diet.name))+
+  geom_point(size=10,shape=21,stroke=4,aes(x=diet.name,y=emmean, color=diet.name,fill=diet.name))+
   xlab("")+
   ylab("Protein Content")+
   geom_errorbar(aes(x=diet.name,ymin=lower.CL,ymax=upper.CL),width=.1)+
@@ -94,6 +94,8 @@ ggplot(data=protein.ww.1.emm.df)+
   theme(legend.position = "none",
         axis.text = element_text(size=24, color="black"),
         axis.title.y = element_text(size=24))
+
+ggsave("figures/trial1_protein.png",width=10,height=5)
 
 #contrasts for protein, trial 2
 colrs<-c("#70AD47","#4A91D0","#4A91D0")

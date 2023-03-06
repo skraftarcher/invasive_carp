@@ -35,9 +35,6 @@ trials$diet.name <- factor(trials$diet.name,levels=c("Control (100% MFM)",
                                     "Control (MFO 100)",
                                     "ICFO 50 / ICFO 50",
                                     "ICFO 100"))
-theme_set(theme_bw()+theme(panel.grid = element_blank()))
-colrs<-c("#70AD47","#4A91D0","#4A91D0")
-ocolrs<-c("#FFC000","#FFC000","#4A91D0")
 
 
 #split up trial 1 and trial 2 data into 2 data frames

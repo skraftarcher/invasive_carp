@@ -12,6 +12,7 @@ if(!require(tidyverse)){install.packages("tidyverse")};library(tidyverse)
 
 #set graphic parameters
 theme_set(theme_bw()+theme(panel.grid = element_blank()))
+theme_set(theme_bw()+theme(panel.grid = element_blank()))
 
 #pull the samplingcalculations.R and stockoutcaculations.R data from ACFM Trial 1 google drive
 source("scripts/download_data-EX.R")

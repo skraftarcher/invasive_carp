@@ -19,7 +19,7 @@ source("scripts/download_data-EX.R")
 samp2 <- read.csv("odata/trial2_samplingcalcs.csv")
 stock2 <- read.csv("odata/trial2_stockingcalcs.csv")
 # list of contrasts
-conts<-list(MFO.allACFO=c(1,0,-1),
+conts2<-list(MFO.allACFO=c(1,0,-1),
             MFO.5050=c(1,-1,0),
             m5050.allACFO=c(0,1,-1))
 
@@ -44,9 +44,8 @@ anova(HSI.2.lm)
 # working through contrasts
 (HSI.2.emm <- emmeans(HSI.2.lm, "diet.name"))
 HSI.2.emm.df<-data.frame(HSI.2.emm)
-contrast(HSI.2.emm, conts,adjust="sidak")
+contrast(HSI.2.emm, conts2,adjust="sidak")
 
-# Visualize results
 ggplot(data=HSI.2.emm.df,aes(x=diet.name,y=emmean))+
   geom_point()+
   xlab("")+
@@ -62,9 +61,8 @@ anova(VSI.2.lm)
 #contrasts for VSI
 (VSI.2.emm <- emmeans(VSI.2.lm, "diet.name"))
 VSI.2.emm.df <- data.frame(VSI.2.emm)
-contrast(VSI.2.emm, conts,adjust="sidak")
+contrast(VSI.2.emm, conts2,adjust="sidak")
 
-#visualizing VSI contrast results
 ggplot(data=VSI.2.emm.df,aes(x=diet.name,y=emmean))+
   geom_point()+
   xlab("")+
@@ -81,23 +79,22 @@ anova(MR.2.lm)
 #contrasts for MR
 (MR.2.emm <- emmeans(MR.2.lm, "diet.name"))
 MR.2.emm.df <- data.frame(MR.2.emm)
-contrast(MR.2.emm, conts,adjust="sidak")
+contrast(MR.2.emm, conts2,adjust="sidak")
 
-#visualizing MR contrast results
 ggplot(data=MR.2.emm.df,
        aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
   geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),
                 width=.1,color="black")+
-  geom_point(shape=21,size=7,stroke=4)+
+  geom_point(shape=21,size=10,stroke=4)+
   xlab("")+
   ylab("Muscle Ratio")+
   theme(legend.position = "none",
-        axis.text = element_text(size=12),
-        axis.title.y = element_text(size=16))+
+        axis.text = element_text(size=24, color="black"),
+        axis.title.y = element_text(size=24))+
   scale_fill_manual(values=colrs)+
   scale_color_manual(values=ocolrs)
 
-ggsave("figures/trial2_MR.png",width=5.99,height=4.25)
+ggsave("figures/trial2_MR.png",width=11,height=5)
 
 #making linear model for cond.factor in samplingcalculations.2.r
 
@@ -108,9 +105,8 @@ anova(cf.2.lm)
 #contrasts for condition factor
 (cf.2.emm<-emmeans(cf.2.lm,"diet.name"))
 cf.2.emm.df<-data.frame(cf.2.emm)
-contrast(cf.2.emm, conts,adjust="sidak")
+contrast(cf.2.emm, conts2,adjust="sidak")
 
-#visualizing condition factor contrast results
 ggplot(data=cf.2.emm.df,
        aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
   geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),
@@ -137,6 +133,46 @@ stock2$diet.name <- factor(stock2$diet.name,levels=c("Control (MFO 100)",
                                      "ICFO 50 / MFO 50", 
                                      "ICFO 100"))
 
+#linear model + contrasts for IFW (initial fish weight)
+ifw.2.lm <- lm(IFW~diet.name,stock2)
+plot(ifw.2.lm)
+summary(ifw.2.lm)
+Anova(ifw.2.lm,type="II")
+(ifw.2.emm <- emmeans(ifw.2.lm, "diet.name"))
+ifw.2.emm.df<-data.frame(ifw.2.emm)
+contrast(ifw.2.emm, conts2,adjust="sidak")
+
+ggplot(data=ifw.2.emm.df,
+       aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),
+                width=.1,color="black")+
+  geom_point(shape=21,size=7,stroke=4)+
+  xlab("")+
+  ylab("Initial Fish Weight (g/fish)")+
+  theme(legend.position = "none",
+        axis.text = element_text(size=12),
+        axis.title.y = element_text(size=16))
+
+#linear model + contrasts for FW (final fish weight)
+fw.2.lm <- lm(w8.weight~diet.name,stock2)
+plot(fw.2.lm)
+summary(fw.2.lm)
+Anova(fw.2.lm,type="II")
+(fw.2.emm <- emmeans(fw.2.lm, "diet.name"))
+fw.2.emm.df<-data.frame(fw.2.emm)
+contrast(fw.2.emm, conts2,adjust="sidak")
+
+ggplot(data=fw.2.emm.df,
+       aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),
+                width=.1,color="black")+
+  geom_point(shape=21,size=7,stroke=4)+
+  xlab("")+
+  ylab("Final Fish Weight (g/fish)")+
+  theme(legend.position = "none",
+        axis.text = element_text(size=12),
+        axis.title.y = element_text(size=16))
+
 #making linear model for total.g.gain in stockoutcalculations.2.r
 
 total.g.gain.2.lm <-lm(total.g.gain~diet.name,stock2)
@@ -147,10 +183,8 @@ Anova(total.g.gain.2.lm,type="II")
 # working through contrasts
 (total.g.gain.2.emm <- emmeans(total.g.gain.2.lm, "diet.name"))
 total.g.gain.2.emm.df<-data.frame(total.g.gain.2.emm)
+contrast(total.g.gain.2.emm, conts2,adjust="sidak")
 
-contrast(total.g.gain.2.emm, conts,adjust="sidak")
-
-#visualizing condition factor contrast results
 ggplot(data=total.g.gain.2.emm.df,
        aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
   geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),
@@ -177,9 +211,8 @@ anova(avgFCR.all.2.lm)
 # working through contrasts 
 (avgFCR.all.2.emm <- emmeans(avgFCR.all.2.lm, "diet.name"))
 avgFCR.all.2.emm.df<-data.frame(avgFCR.all.2.emm)
-contrast(avgFCR.all.2.emm, conts,adjust="sidak")
+contrast(avgFCR.all.2.emm, conts2,adjust="sidak")
 
-#visualizing condition factor contrast results
 ggplot(data=avgFCR.all.2.emm.df,aes(x=diet.name,y=emmean))+
   geom_point()+
   xlab("")+
@@ -197,9 +230,8 @@ anova(avgFI.all.2.lm)
 # working through contrasts
 (avgFI.all.2.emm <- emmeans(avgFI.all.2.lm, "diet.name"))
 avgFI.all.2.emm.df<-data.frame(avgFI.all.2.emm)
-contrast(avgFI.all.2.emm, conts,adjust="sidak")
+contrast(avgFI.all.2.emm, conts2,adjust="sidak")
 
-#visualizing condition factor contrast results
 ggplot(data=avgFI.all.2.emm.df,aes(x=diet.name,y=emmean))+
   geom_point()+
   xlab("")+
@@ -217,36 +249,34 @@ anova(FCR.all.2.lm)
 # working through contrasts
 (FCR.all.2.emm <- emmeans(FCR.all.2.lm, "diet.name"))
 FCR.all.2.emm.df<-data.frame(FCR.all.2.emm)
-contrast(FCR.all.2.emm, conts,adjust="sidak")
+contrast(FCR.all.2.emm, conts2,adjust="sidak")
 
-#visualizing condition factor contrast results
 ggplot(data=FCR.all.2.emm.df,
        aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
   geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),
                 width=.1,color="black")+
-  geom_point(shape=21,size=7,stroke=4)+
+  geom_point(shape=21,size=10,stroke=4)+
   xlab("")+
   ylab("Feed Conversion Ratio")+
   theme(legend.position = "none",
-        axis.text = element_text(size=12),
-        axis.title.y = element_text(size=16))+
+        axis.text = element_text(size=24,color="black"),
+        axis.title.y = element_text(size=24))+
   scale_fill_manual(values=colrs)+
   scale_color_manual(values=ocolrs)
 
-ggsave("figures/trial2_FCR.png",width=5.99,height=4.25)
+ggsave("figures/trial2_FCR.png",width=11,height=5)
 
 #making linear model for pincrease.all in stockoutcalculations.2.r
 pincrease.all.2.lm <-lm(pincrease.all~diet.name,stock2)
 plot(pincrease.all.2.lm)
-summary(FCR.all.2.lm)
+summary(pincrease.all.2.lm)
 anova(pincrease.all.2.lm)
 
 # working through contrasts
 (pincrease.all.2.emm <- emmeans(pincrease.all.2.lm, "diet.name"))
 pincrease.all.2.emm.df<-data.frame(pincrease.all.2.emm)
-contrast(pincrease.all.2.emm, conts,adjust="sidak")
+contrast(pincrease.all.2.emm, conts2,adjust="sidak")
 
-#visualizing condition factor contrast results
 ggplot(data=pincrease.all.2.emm.df,aes(x=diet.name,y=emmean))+
   geom_point()+
   xlab("")+

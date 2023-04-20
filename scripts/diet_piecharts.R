@@ -19,11 +19,12 @@ ggplot(data=trial1)+
   facet_grid(~diet)+
   theme_void()+
   theme(legend.position = "bottom",
-        legend.title = element_blank()) +
+        legend.title = element_blank(),
+        legend.text = element_text(size=15)) +
   guides(fill = guide_legend(nrow = 2, byrow = TRUE))+
   scale_fill_manual(values=c("#70AD47","#4A91D0","#FFC000","#C5E0B4"))
 
-ggsave("figures/diets_trial1.png",width=5.99,height=4.25)  
+ggsave("figures/diets_trial1.png",width=7,height=3.5)  
 
 
 # trial 2----
@@ -45,7 +46,8 @@ ggplot(data=trial2)+
   facet_grid(~diet)+
   theme_void()+
   theme(legend.position = "bottom",
-        legend.title = element_blank()) +
+        legend.title = element_blank(),
+        legend.text = element_text(size=15)) +
   scale_fill_manual(values=c("#70AD47","#4A91D0"))
 
-ggsave("figures/diets_trial2.png",width=5.99,height=4.25)  
+ggsave("figures/diets_trial2.png",width=7,height=3.5)  

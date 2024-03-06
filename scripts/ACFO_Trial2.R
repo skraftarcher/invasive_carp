@@ -137,7 +137,7 @@ stock2$diet.name <- factor(stock2$diet.name,levels=c("Control (MFO 100)",
 ifw.2.lm <- lm(IFW~diet.name,stock2)
 plot(ifw.2.lm)
 summary(ifw.2.lm)
-Anova(ifw.2.lm,type="II")
+Anova(ifw.2.lm,type="II") # F = 2.3075 , P = 0.1806
 (ifw.2.emm <- emmeans(ifw.2.lm, "diet.name"))
 ifw.2.emm.df<-data.frame(ifw.2.emm)
 contrast(ifw.2.emm, conts2,adjust="sidak")
@@ -157,7 +157,7 @@ ggplot(data=ifw.2.emm.df,
 fw.2.lm <- lm(w8.weight~diet.name,stock2)
 plot(fw.2.lm)
 summary(fw.2.lm)
-Anova(fw.2.lm,type="II")
+Anova(fw.2.lm,type="II") # F = 0.6042 , P = 0.5767
 (fw.2.emm <- emmeans(fw.2.lm, "diet.name"))
 fw.2.emm.df<-data.frame(fw.2.emm)
 contrast(fw.2.emm, conts2,adjust="sidak")
@@ -173,14 +173,12 @@ ggplot(data=fw.2.emm.df,
         axis.text = element_text(size=12),
         axis.title.y = element_text(size=16))
 
-#making linear model for total.g.gain in stockoutcalculations.2.r
 
+#making linear model for total.g.gain in stockoutcalculations.2.r
 total.g.gain.2.lm <-lm(total.g.gain~diet.name,stock2)
 plot(total.g.gain.2.lm)
 summary(total.g.gain.2.lm)
 Anova(total.g.gain.2.lm,type="II")
-
-# working through contrasts
 (total.g.gain.2.emm <- emmeans(total.g.gain.2.lm, "diet.name"))
 total.g.gain.2.emm.df<-data.frame(total.g.gain.2.emm)
 contrast(total.g.gain.2.emm, conts2,adjust="sidak")
@@ -202,13 +200,10 @@ ggsave("figures/trial2_growth.png",width=5.99,height=4.25)
 
 
 #making linear model for avgFCR.all in stockoutcalculations.2.r
-
 avgFCR.all.2.lm <-lm(avgFCR.all~diet.name,stock2)
 plot(avgFCR.all.2.lm)
 summary(avgFCR.all.2.lm)
 anova(avgFCR.all.2.lm)
-
-# working through contrasts 
 (avgFCR.all.2.emm <- emmeans(avgFCR.all.2.lm, "diet.name"))
 avgFCR.all.2.emm.df<-data.frame(avgFCR.all.2.emm)
 contrast(avgFCR.all.2.emm, conts2,adjust="sidak")
@@ -221,13 +216,10 @@ ggplot(data=avgFCR.all.2.emm.df,aes(x=diet.name,y=emmean))+
 
 
 #making linear model for avgFI.all in stockoutcalculations.2.r
-
 avgFI.all.2.lm <-lm(avgFI.all~diet.name,stock2)
 plot(avgFI.all.2.lm)
 summary(avgFI.all.2.lm)
-anova(avgFI.all.2.lm)
-
-# working through contrasts
+anova(avgFI.all.2.lm) # F = 0.5566 , P = 0.6002
 (avgFI.all.2.emm <- emmeans(avgFI.all.2.lm, "diet.name"))
 avgFI.all.2.emm.df<-data.frame(avgFI.all.2.emm)
 contrast(avgFI.all.2.emm, conts2,adjust="sidak")
@@ -240,13 +232,10 @@ ggplot(data=avgFI.all.2.emm.df,aes(x=diet.name,y=emmean))+
 
 
 #making linear model for FCR.all in stockoutcalculations.2.r
-
 FCR.all.2.lm <-lm(FCR.all~diet.name,stock2)
 plot(FCR.all.2.lm)
 summary(FCR.all.2.lm)
-anova(FCR.all.2.lm)
-
-# working through contrasts
+anova(FCR.all.2.lm) # F = 1.7236 , P = 0.2562
 (FCR.all.2.emm <- emmeans(FCR.all.2.lm, "diet.name"))
 FCR.all.2.emm.df<-data.frame(FCR.all.2.emm)
 contrast(FCR.all.2.emm, conts2,adjust="sidak")
@@ -270,9 +259,7 @@ ggsave("figures/trial2_FCR.png",width=11,height=5)
 pincrease.all.2.lm <-lm(pincrease.all~diet.name,stock2)
 plot(pincrease.all.2.lm)
 summary(pincrease.all.2.lm)
-anova(pincrease.all.2.lm)
-
-# working through contrasts
+anova(pincrease.all.2.lm) # F = 0.6713 , P = 0.5456
 (pincrease.all.2.emm <- emmeans(pincrease.all.2.lm, "diet.name"))
 pincrease.all.2.emm.df<-data.frame(pincrease.all.2.emm)
 contrast(pincrease.all.2.emm, conts2,adjust="sidak")

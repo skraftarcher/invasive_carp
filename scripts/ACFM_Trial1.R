@@ -189,9 +189,40 @@ ggplot(data=halfw.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name
         axis.title.y = element_text(size=16))
 
 #WEEKS 0-4: w0-4 PIncrease 
+halfpi.lm <- lm(w0.4.pincrease~diet.name, stock)
+plot(halfpi.lm)
+summary(halfpi.lm)
+Anova(halfpi.lm,type="II")
+(halfpi.emm<-emmeans(halfpi.lm,"diet.name"))
+halfpi.emm.df<-data.frame(halfpi.emm)
+contrast(halfpi.emm,conts,adjust="sidak")
 
+ggplot(data=halfpi.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
+  geom_point(size=7,shape=21,stroke=2)+
+  xlab("")+
+  ylab("Week 4 Fish Weight (g/fish)")+
+  theme(legend.position = "none",
+        axis.text = element_text(size=12),
+        axis.title.y = element_text(size=16))
 
 #WEEKS 0-4: w0-4 FI
+halfFI.lm <- lm(w0.4.FI~diet.name, stock)
+plot(halfFI.lm)
+summary(halfFI.lm)
+Anova(halfFI.lm,type="II")
+(halfFI.emm<-emmeans(halfFI.lm,"diet.name"))
+halfFI.emm.df<-data.frame(halfFI.emm)
+contrast(halfFI.emm,conts,adjust="sidak")
+
+ggplot(data=halfFI.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
+  geom_point(size=7,shape=21,stroke=2)+
+  xlab("")+
+  ylab("Week 4 Fish Weight (g/fish)")+
+  theme(legend.position = "none",
+        axis.text = element_text(size=12),
+        axis.title.y = element_text(size=16))
 
 #WEEKS 0-4: w0-4 FCR
 

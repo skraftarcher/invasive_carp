@@ -147,7 +147,10 @@ stock$diet.name <- factor(stock$diet.name,levels=c("Control (100% MFM)",
                           labels=c("Control (100% MFM)",
                                    "ICFM for MFM", 
                                    "All ICFM"))
+
+
 #going to use emmeans for contrasts b/c it is the suggested new version of lsmeans, which is the contrast package used on the R walkthrough
+
 
 #linear model + contrasts for IFW (Initial Fish Weight)
 ifw.lm <- lm(IFW~diet.name, stock)
@@ -166,6 +169,31 @@ ggplot(data=ifw.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))
   theme(legend.position = "none",
         axis.text = element_text(size=12),
         axis.title.y = element_text(size=16))
+
+#WEEKS 0-4: w4 weight 
+halfw.lm <- lm(w4.weight~diet.name, stock)
+plot(halfw.lm)
+summary(halfw.lm)
+Anova(halfw.lm,type="II")
+(halfw.emm<-emmeans(halfw.lm,"diet.name"))
+halfw.emm.df<-data.frame(halfw.emm)
+contrast(halfw.emm,conts,adjust="sidak")
+
+ggplot(data=halfw.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
+  geom_point(size=7,shape=21,stroke=2)+
+  xlab("")+
+  ylab("Week 4 Fish Weight (g/fish)")+
+  theme(legend.position = "none",
+        axis.text = element_text(size=12),
+        axis.title.y = element_text(size=16))
+
+#WEEKS 0-4: w0-4 PIncrease 
+
+
+#WEEKS 0-4: w0-4 FI
+
+#WEEKS 0-4: w0-4 FCR
 
 
 #linear model + contrasts for FW (final weight, 8 weeks)

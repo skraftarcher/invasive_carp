@@ -156,7 +156,7 @@ stock$diet.name <- factor(stock$diet.name,levels=c("Control (100% MFM)",
 ifw.lm <- lm(IFW~diet.name, stock)
 plot(ifw.lm)
 summary(ifw.lm)
-Anova(ifw.lm,type="II")
+Anova(ifw.lm,type="II") #df 2, residuals df 6, F-value = 1.8372, P=0.2385
 (ifw.emm<-emmeans(ifw.lm,"diet.name"))
 ifw.emm.df<-data.frame(ifw.emm)
 contrast(ifw.emm,conts,adjust="sidak")
@@ -165,7 +165,7 @@ ggplot(data=ifw.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))
   geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
   geom_point(size=7,shape=21,stroke=2)+
   xlab("")+
-  ylab("Initial Fish Weight (g/fish)")+
+  ylab("Fish Weight (g/fish)")+
   theme(legend.position = "none",
         axis.text = element_text(size=12),
         axis.title.y = element_text(size=16))
@@ -174,7 +174,7 @@ ggplot(data=ifw.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))
 halfw.lm <- lm(w4.weight~diet.name, stock)
 plot(halfw.lm)
 summary(halfw.lm)
-Anova(halfw.lm,type="II")
+Anova(halfw.lm,type="II") # F = 1.0184 , P = 0.4161
 (halfw.emm<-emmeans(halfw.lm,"diet.name"))
 halfw.emm.df<-data.frame(halfw.emm)
 contrast(halfw.emm,conts,adjust="sidak")
@@ -183,7 +183,7 @@ ggplot(data=halfw.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name
   geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
   geom_point(size=7,shape=21,stroke=2)+
   xlab("")+
-  ylab("Week 4 Fish Weight (g/fish)")+
+  ylab("Fish Weight (g/fish)")+
   theme(legend.position = "none",
         axis.text = element_text(size=12),
         axis.title.y = element_text(size=16))
@@ -192,7 +192,7 @@ ggplot(data=halfw.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name
 halfpi.lm <- lm(w0.4.pincrease~diet.name, stock)
 plot(halfpi.lm)
 summary(halfpi.lm)
-Anova(halfpi.lm,type="II")
+Anova(halfpi.lm,type="II") # F = 0.2992 , P = 0.7519
 (halfpi.emm<-emmeans(halfpi.lm,"diet.name"))
 halfpi.emm.df<-data.frame(halfpi.emm)
 contrast(halfpi.emm,conts,adjust="sidak")
@@ -201,7 +201,7 @@ ggplot(data=halfpi.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.nam
   geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
   geom_point(size=7,shape=21,stroke=2)+
   xlab("")+
-  ylab("Week 4 Fish Weight (g/fish)")+
+  ylab("% Biomass Increase (g)")+
   theme(legend.position = "none",
         axis.text = element_text(size=12),
         axis.title.y = element_text(size=16))
@@ -210,7 +210,7 @@ ggplot(data=halfpi.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.nam
 halfFI.lm <- lm(w0.4.FI~diet.name, stock)
 plot(halfFI.lm)
 summary(halfFI.lm)
-Anova(halfFI.lm,type="II")
+Anova(halfFI.lm,type="II") # F = 3.3579 , P = 0.1051
 (halfFI.emm<-emmeans(halfFI.lm,"diet.name"))
 halfFI.emm.df<-data.frame(halfFI.emm)
 contrast(halfFI.emm,conts,adjust="sidak")
@@ -219,19 +219,52 @@ ggplot(data=halfFI.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.nam
   geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
   geom_point(size=7,shape=21,stroke=2)+
   xlab("")+
-  ylab("Week 4 Fish Weight (g/fish)")+
+  ylab("Feed Intake")+
   theme(legend.position = "none",
         axis.text = element_text(size=12),
         axis.title.y = element_text(size=16))
 
 #WEEKS 0-4: w0-4 FCR
+halfFCR.lm <- lm(w0.4.FCR~diet.name, stock)
+plot(halfFCR.lm)
+summary(halfFCR.lm)
+Anova(halfFCR.lm,type="II") # F = 0.6574 , P = 0.5519
+(halfFCR.emm<-emmeans(halfFCR.lm,"diet.name"))
+halfFCR.emm.df<-data.frame(halfFCR.emm)
+contrast(halfFCR.emm,conts,adjust="sidak")
 
+ggplot(data=halfFCR.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
+  geom_point(size=7,shape=21,stroke=2)+
+  xlab("")+
+  ylab("Feed Conversion Ratio")+
+  theme(legend.position = "none",
+        axis.text = element_text(size=12),
+        axis.title.y = element_text(size=16))
 
-#linear model + contrasts for FW (final weight, 8 weeks)
+#WEEKS 6-8: IFW at Week 6
+w6fw.lm <- lm(w6.weight~diet.name, stock)
+plot(w6fw.lm)
+summary(w6fw.lm)
+Anova(w6fw.lm,type="II") # F =  2.9926 , P = 0.1398
+(w6fw.emm<-emmeans(w6fw.lm,"diet.name"))
+w6fw.emm.df<-data.frame(w6fw.emm)
+contrast(w6fw.emm,conts,adjust="sidak")
+
+ggplot(data=w6fw.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
+  geom_point(size=7,shape=21,stroke=2)+
+  xlab("")+
+  ylab("Fish Weight")+
+  theme(legend.position = "none",
+        axis.text = element_text(size=12),
+        axis.title.y = element_text(size=16))
+
+#WEEKS 6-8: FFW at Week 8
 fw.lm <- lm(w8.weight~diet.name, stock)
 plot(fw.lm)
 summary(fw.lm)
-Anova(fw.lm,type="II")
+Anova(fw.lm,type="II") # F = 3.6875 , P = 0.09027
 (fw.emm<-emmeans(fw.lm,"diet.name"))
 fw.emm.df<-data.frame(fw.emm)
 contrast(fw.emm,conts,adjust="sidak")
@@ -240,11 +273,64 @@ ggplot(data=fw.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
   geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
   geom_point(size=7,shape=21,stroke=2)+
   xlab("")+
-  ylab("Final Fish Weight (g/fish)")+
+  ylab("Fish Weight (g/fish)")+
   theme(legend.position = "none",
         axis.text = element_text(size=12),
         axis.title.y = element_text(size=16))
 
+#WEEK 6-8: WG % Increase
+w68pi.lm <- lm(w6.8.pincrease~diet.name, stock)
+plot(w68pi.lm)
+summary(w68pi.lm)
+Anova(w68pi.lm,type="II") # F = 0.5705 , P = 0.5982
+(w68pi.emm<-emmeans(w68pi.lm,"diet.name"))
+w68pi.emm.df<-data.frame(w68pi.emm)
+contrast(w68pi.emm,conts,adjust="sidak")
+
+ggplot(data=w68pi.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
+  geom_point(size=7,shape=21,stroke=2)+
+  xlab("")+
+  ylab("Total % Biomass Increase (g)")+
+  theme(legend.position = "none",
+        axis.text = element_text(size=12),
+        axis.title.y = element_text(size=16))
+
+#WEEK 6-8: FI
+w68FI.lm <- lm(w6.8.FI~diet.name, stock)
+plot(w68FI.lm)
+summary(w68FI.lm)
+Anova(w68FI.lm,type="II") # F = 2.9889 , P = 0.14
+(w68FI.emm<-emmeans(w68FI.lm,"diet.name"))
+w68FI.emm.df<-data.frame(w68FI.emm)
+contrast(w68FI.emm,conts,adjust="sidak")
+
+ggplot(data=w68FI.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
+  geom_point(size=7,shape=21,stroke=2)+
+  xlab("")+
+  ylab("Feed Intake")+
+  theme(legend.position = "none",
+        axis.text = element_text(size=12),
+        axis.title.y = element_text(size=16))
+
+#WEEK 6-8: FCR
+w68FCR.lm <- lm(w6.8.FCR~diet.name, stock)
+plot(w68FCR.lm)
+summary(w68FCR.lm)
+Anova(w68FCR.lm,type="II") # F = 4.7178 , P = 0.07061
+(w68FCR.emm<-emmeans(w68FCR.lm,"diet.name"))
+w68FCR.emm.df<-data.frame(w68FCR.emm)
+contrast(w68FCR.emm,conts,adjust="sidak")
+
+ggplot(data=w68FCR.emm.df,aes(x=diet.name,y=emmean,color=diet.name,fill=diet.name))+
+  geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1,color="black")+
+  geom_point(size=7,shape=21,stroke=2)+
+  xlab("")+
+  ylab("Feed Conversion Ratio")+
+  theme(legend.position = "none",
+        axis.text = element_text(size=12),
+        axis.title.y = element_text(size=16))
 
 #making linear model for total.g.gain in sampling calculations
 

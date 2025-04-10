@@ -52,6 +52,7 @@ ocolrs<-c("#FFC000","#FFC000","#4A91D0")
 
 
 #contrasts for PRE, trial 1
+trial1_erepre <- trial1_erepre[-(10:25),]
 pre1.lm <- lm(pre~diet.name,trial1_erepre)
 plot(pre1.lm)
 summary(pre1.lm)
@@ -60,6 +61,8 @@ anova(pre1.lm)
 pre1.emm.df<-data.frame(pre1.emm)
 contrast(pre1.emm, conts,adjust="sidak")
 
+tapply(trial1_erepre$pre, trial1_erepre$diet.name, sd) #standard deviation
+
 ggplot(data=pre1.emm.df,aes(x=diet.name,y=emmean))+
   geom_point()+
   xlab("")+
@@ -67,13 +70,16 @@ ggplot(data=pre1.emm.df,aes(x=diet.name,y=emmean))+
   geom_errorbar(aes(ymin=lower.CL,ymax=upper.CL),width=.1)
 
 #contrasts for ERE, trial 1
-ere1.lm <- lm(ere~diet.name,trial1_erepre)
+trial1_ere_nooutlier <- trial1_erepre[-2,] #eliminates outlier
+ere1.lm <- lm(ere~diet.name,trial1_ere_nooutlier)
 plot(ere1.lm)
 summary(ere1.lm)
 anova(ere1.lm)
 (ere1.emm <- emmeans(ere1.lm, "diet.name"))
 ere1.emm.df<-data.frame(ere1.emm)
 contrast(ere1.emm, conts,adjust="sidak")
+
+tapply(trial1_ere_nooutlier$ere, trial1_ere_nooutlier$diet.name, sd) #standard deviation
 
 ggplot(data=ere1.emm.df,aes(x=diet.name,y=emmean))+
   geom_point()+
